@@ -16,82 +16,108 @@ function Register() {
 
    return (
       <>
-         <div class="flex items-center justify-center pt-8">
+         <div className="flex items-center justify-center pt-8">
+            <form
+               onSubmit={handleSubmit}
+               className="flex min-w-80 max-w-xl flex-col gap-6 rounded-lg bg-base-300 p-8"
+            >
+               <h1 className="text-2xl font-bold text-center text-primary">Registro</h1>
 
-            <form onSubmit={handleSubmit} className="flex min-w-80 max-w-xl flex-col gap-6 rounded-lg bg-gray-50 p-8">
-               <h1 className=" font-bold text-2xl">Registro</h1>
-               <div>
-                  <label className="block mb-1">Nombre:</label>
+               <label className="form-control w-full max-w-xs">
+                  <div className="label">
+                     <span className="label-text">Nombre</span>
+                  </div>
                   <input
                      type="text"
                      name="nombre"
                      value={nombre}
                      onChange={(e) => setNombre(e.target.value)}
-                     className="w-full p-2 border rounded bg-white"
+                     placeholder="Tu nombre"
+                     className="input input-bordered input-primary w-full"
                   />
-               </div>
+               </label>
 
-               <div>
-                  <label className="block mb-1">Apellido:</label>
+               <label className="form-control w-full max-w-xs">
+                  <div className="label">
+                     <span className="label-text">Apellido</span>
+                  </div>
                   <input
                      type="text"
                      name="apellido"
                      value={apellido}
                      onChange={(e) => setApellido(e.target.value)}
-                     className="w-full p-2 border rounded"
+                     placeholder="Tu apellido"
+                     className="input input-bordered input-primary w-full"
                   />
-               </div>
+               </label>
 
-               <div>
-                  <label className="block mb-1">Email:</label>
+               <label className="form-control w-full max-w-xs">
+                  <div className="label">
+                     <span className="label-text">Email</span>
+                  </div>
                   <input
                      type="email"
                      name="email"
                      value={email}
                      onChange={(e) => setEmail(e.target.value)}
-                     className="w-full p-2 border rounded"
+                     placeholder="tucorreo@ejemplo.com"
+                     className="input input-bordered input-primary w-full"
                   />
-               </div>
+               </label>
 
-               <div>
-                  <label className="block mb-1">Teléfono:</label>
+               <label className="form-control w-full max-w-xs">
+                  <div className="label">
+                     <span className="label-text">Teléfono</span>
+                  </div>
                   <input
                      type="tel"
                      name="telefono"
                      value={telefono}
                      onChange={(e) => setTelefono(e.target.value)}
-                     className="w-full p-2 border rounded"
+                     placeholder="Tu número"
+                     className="input input-bordered input-primary w-full"
                   />
-               </div>
+               </label>
 
-               <div>
-                  <label className="block mb-1">Contraseña:</label>
+               <label className="form-control w-full max-w-xs">
+                  <div className="label">
+                     <span className="label-text">Contraseña</span>
+                  </div>
                   <input
                      type="password"
                      name="password"
                      value={password}
                      onChange={(e) => setPassword(e.target.value)}
-                     className="w-full p-2 border rounded"
+                     placeholder="Mínimo 6 caracteres"
+                     className="input input-bordered input-primary w-full"
                   />
-               </div>
+               </label>
 
-               <div>
-                  <label className="block mb-1">Confirmar Contraseña:</label>
+               <label className="form-control w-full max-w-xs">
+                  <div className="label">
+                     <span className="label-text">Confirmar Contraseña</span>
+                  </div>
                   <input
                      type="password"
                      name="confirmPw"
                      value={confirmPw}
                      onChange={(e) => setConfirmPw(e.target.value)}
-                     className="w-full p-2 border rounded"
+                     placeholder="Repite la contraseña"
+                     className="input input-bordered input-primary w-full"
                   />
-               </div>
+               </label>
 
                <button
                   type="submit"
-                  className="mt-4 w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 cursor-pointer"
+                  className="btn btn-primary mt-2 w-full"
                >
                   Registrarse
                </button>
+
+               <span className="text-center">
+                  ¿Ya tenés cuenta?
+                  <a href="/login" className="link link-info ml-1">Iniciar sesión</a>
+               </span>
             </form>
          </div>
 
