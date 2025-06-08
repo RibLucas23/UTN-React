@@ -1,11 +1,11 @@
-import Register from "./components/Register"
+import RegisterForm from "./components/RegisterForm"
 
 
 function App() {
 
   return (
     <>
-      <Register />
+      <RegisterForm />
     </>
   )
 }
