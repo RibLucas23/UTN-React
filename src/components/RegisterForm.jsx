@@ -47,6 +47,7 @@ function RegisterForm() {
                         name={camp.name}
                         value={formData[camp.name]}
                         onChange={handleChange}
+                        autoComplete="on"
                         placeholder={camp.placeholder}
                         className="input input-bordered input-primary w-full"
                      />

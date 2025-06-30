@@ -1,11 +1,13 @@
-import RegisterForm from "./components/RegisterForm"
+import NavBar from "./layout/NavBar"
+import Home from "./pages/home/Home"
 
 
 function App() {
 
   return (
     <>
-      <RegisterForm />
+      <NavBar />
+      <Home />
     </>
   )
 }
