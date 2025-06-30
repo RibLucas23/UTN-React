@@ -1,14 +1,15 @@
+import { Link } from "react-router-dom";
 
 export default function NavBar() {
    return (
       <nav className="navbar bg-base-300 shadow-sm">
          <div className="flex-1">
-            <a className="btn btn-ghost text-xl">UTN-Front</a>
+            <Link to={"/"} className="btn btn-ghost text-xl">UTN-Front</Link>
          </div>
          <div className="flex-none">
             <ul className="menu menu-horizontal px-1">
-               <li><a>Registrarse</a></li>
-               <li><a>Login</a></li>
+               <li><Link to={"/register"}>Registrarse</Link></li>
+               <li><Link to={"/login"}>Login</Link></li>
 
                <li>
                   <details>

@@ -1,8 +1,8 @@
+import { Link } from "react-router-dom"
 
 export default function ProductsCard({ productData }) {
-   console.log(productData)
    return (
-      <div className="card bg-base-100 max-w-96 shadow-sm px-2   border-1 border-base-300">
+      <Link to={`product/${productData.id}`} className="card bg-base-100 max-w-96 shadow-sm px-2   border-1 border-base-300">
          <figure className="w-full h-48 flex items-center justify-center bg-white">
             <img
                src={productData.image}
@@ -18,6 +18,6 @@ export default function ProductsCard({ productData }) {
                <button className="btn btn-primary">Buy Now</button>
             </div>
          </div>
-      </div>
+      </Link>
    )
 }
