@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 
 export default function LoginForm() {
    const [formData, setFormData] = useState({
@@ -103,9 +104,9 @@ export default function LoginForm() {
 
             <span className="text-center">
                ¿No tenés cuenta?
-               <a href="/register" className="link link-info ml-1">
+               <Link to={"/register"} className="link link-info ml-1">
                   Registrate
-               </a>
+               </Link>
             </span>
          </form>
       </div>
