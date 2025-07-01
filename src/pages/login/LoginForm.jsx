@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import EyeToggleButton from "../../components/icons/EyeToggleButton";
 
 export default function LoginForm() {
    const [formData, setFormData] = useState({
@@ -20,21 +21,19 @@ export default function LoginForm() {
       setErrors({ ...errors, [name]: "" });
    };
 
+   const validate = () => {
+      const newErrors = {}
+      const { email, password } = formData
+      if (!email) newErrors.email = "Por favor completá el email";
+      if (!password) newErrors.password = "Por favor completá la contraseña";
+      else if (password.length < 6) newErrors.password = "La contraseña debe tener al menos 6 caracteres";
+
+      return newErrors
+
+   }
    const handleSubmit = (e) => {
       e.preventDefault();
-
-      const newErrors = {};
-
-      if (!formData.email) {
-         newErrors.email = "Por favor completá el email";
-      }
-
-      if (!formData.password) {
-         newErrors.password = "Por favor completá la contraseña";
-      } else if (formData.password.length < 6) {
-         newErrors.password = "La contraseña debe tener al menos 6 caracteres";
-      }
-
+      const newErrors = validate()
       if (Object.keys(newErrors).length > 0) {
          setErrors(newErrors);
          return;
@@ -56,7 +55,9 @@ export default function LoginForm() {
          name: "password",
          type: showPassword ? "text" : "password",
          placeholder: "Ingresá tu contraseña",
-         id: "password"
+         id: "password",
+         isPassword: true, toggle: () => setShowPassword(!showPassword),
+         visible: showPassword
       }
    ];
 
@@ -68,32 +69,32 @@ export default function LoginForm() {
          >
             <h1 className="text-2xl font-bold text-center text-primary">Iniciar sesión</h1>
 
-            {formFields.map((field) => (
-               <label className="form-control w-full max-w-xs" key={field.id}>
+            {formFields.map(({ name, id, label, type, placeholder, isPassword, toggle, visible }) => (
+               <label className="form-control w-full max-w-xs" key={id}>
                   <div className="label justify-between">
-                     <span className="label-text">{field.label}</span>
-                     {field.name === "password" && (
-                        <span
-                           className="label-text-alt link link-info cursor-pointer"
-                           onClick={() => setShowPassword(!showPassword)}
-                        >
-                           {showPassword ? "Ocultar" : "Mostrar"}
-                        </span>
+                     <span className="label-text">{label}</span>
+
+                  </div>
+                  <div className="flex">
+
+                     <input
+                        type={type}
+                        name={name}
+                        id={id}
+                        value={formData[name]}
+                        onChange={handleChange}
+                        placeholder={placeholder}
+                        className={`input input-bordered w-full ${errors[name] ? "input-error" : "input-primary"}`}
+                     />
+                     {isPassword && (
+                        <div className="h-4 w-4 opacity-70 hover:cursor-pointer">
+                           <EyeToggleButton hide={visible} onClick={toggle} />
+                        </div>
                      )}
                   </div>
 
-                  <input
-                     type={field.type}
-                     name={field.name}
-                     id={field.id}
-                     value={formData[field.name]}
-                     onChange={handleChange}
-                     placeholder={field.placeholder}
-                     className={`input input-bordered w-full ${errors[field.name] ? "input-error" : "input-primary"}`}
-                  />
-
-                  {errors[field.name] && (
-                     <span className="label-text-alt text-error mt-1">{errors[field.name]}</span>
+                  {errors[name] && (
+                     <span className="label-text-alt text-error mt-1">{errors[name]}</span>
                   )}
                </label>
             ))}
