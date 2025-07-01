@@ -1,108 +1,102 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import EyeToggleButton from "../../components/icons/EyeToggleButton";
 
 export default function RegisterForm() {
    const [formData, setFormData] = useState({
       nombre: "",
       apellido: "",
       email: "",
-      telefono: 0,
+      telefono: "",
       password: "",
       confirmPw: ""
    });
 
    const [errors, setErrors] = useState({});
+   const [showPassword, setShowPassword] = useState(false);
+   const [showConfirmPw, setShowConfirmPw] = useState(false);
 
    const handleChange = (e) => {
       const { name, value } = e.target;
-      setFormData({ ...formData, [name]: value });
-      setErrors({ ...errors, [name]: "" });
+      setFormData((prev) => ({ ...prev, [name]: value }));
+      setErrors((prev) => ({ ...prev, [name]: "" }));
    };
 
-   const validateEmail = (email) => {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      return re.test(email);
+   const validate = () => {
+      const newErrors = {};
+      const { nombre, apellido, email, telefono, password, confirmPw } = formData;
+
+      if (!nombre) newErrors.nombre = "Campo obligatorio";
+      if (!apellido) newErrors.apellido = "Campo obligatorio";
+      if (!email) newErrors.email = "Campo obligatorio";
+      else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) newErrors.email = "Email inválido";
+      if (!telefono) newErrors.telefono = "Campo obligatorio";
+      if (!password) newErrors.password = "Campo obligatorio";
+      else if (password.length < 6) newErrors.password = "Mínimo 6 caracteres";
+      if (!confirmPw) newErrors.confirmPw = "Campo obligatorio";
+      else if (confirmPw !== password) newErrors.confirmPw = "No coincide con la contraseña";
+
+      return newErrors;
    };
 
    const handleSubmit = (e) => {
       e.preventDefault();
-      const newErrors = {};
-
-      if (!formData.nombre) newErrors.nombre = "Este campo es obligatorio";
-      if (!formData.apellido) newErrors.apellido = "Este campo es obligatorio";
-      if (!formData.email) {
-         newErrors.email = "Este campo es obligatorio";
-      } else if (!validateEmail(formData.email)) {
-         newErrors.email = "Email inválido";
-      }
-
-      if (!formData.telefono) newErrors.telefono = "Este campo es obligatorio";
-      if (!formData.password) {
-         newErrors.password = "Este campo es obligatorio";
-      } else if (formData.password.length < 6) {
-         newErrors.password = "La contraseña debe tener al menos 6 caracteres";
-      }
-
-      if (!formData.confirmPw) {
-         newErrors.confirmPw = "Este campo es obligatorio";
-      } else if (formData.confirmPw !== formData.password) {
-         newErrors.confirmPw = "Las contraseñas no coinciden";
-      }
-
-      if (Object.keys(newErrors).length > 0) {
-         setErrors(newErrors);
-         return;
-      }
-
+      const newErrors = validate();
+      if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
       console.log("Registro:", formData);
    };
 
-   const formCamps = [
-      { name: "nombre", label: "Nombre", type: "text", placeholder: "Tu nombre", id: "nombre" },
-      { name: "apellido", label: "Apellido", type: "text", placeholder: "Tu apellido", id: "apellido" },
-      { name: "email", label: "Email", type: "email", placeholder: "tucorreo@ejemplo.com", id: "email" },
-      { name: "telefono", label: "Teléfono", type: "number", placeholder: "Tu número", id: "telefono" },
-      { name: "password", label: "Contraseña", type: "password", placeholder: "Mínimo 6 caracteres", id: "password" },
-      { name: "confirmPw", label: "Confirmar Contraseña", type: "password", placeholder: "Repite la contraseña", id: "confirmPw" }
+   const fields = [
+      { name: "nombre", label: "Nombre", type: "text", placeholder: "Tu nombre" },
+      { name: "apellido", label: "Apellido", type: "text", placeholder: "Tu apellido" },
+      { name: "email", label: "Email", type: "email", placeholder: "tucorreo@ejemplo.com" },
+      { name: "telefono", label: "Teléfono", type: "tel", placeholder: "Tu número" },
+      {
+         name: "password", label: "Contraseña", type: showPassword ? "text" : "password", placeholder: "Ingresá tu contraseña",
+         isPassword: true, toggle: () => setShowPassword(!showPassword), visible: showPassword
+      },
+      {
+         name: "confirmPw", label: "Confirmar Contraseña", type: showConfirmPw ? "text" : "password", placeholder: "Reingresá tu contraseña",
+         isPassword: true, toggle: () => setShowConfirmPw(!showConfirmPw), visible: showConfirmPw
+      }
    ];
 
    return (
       <div className="flex items-center justify-center pt-8">
-         <form
-            onSubmit={handleSubmit}
-            className="flex min-w-80 max-w-xl flex-col gap-6 rounded-lg bg-base-300 p-8"
-         >
+         <form onSubmit={handleSubmit} className="flex max-w-xl flex-col gap-6 rounded-lg bg-base-300 p-8">
             <h1 className="text-2xl font-bold text-center text-primary">Registro</h1>
 
-            {formCamps.map((camp) => (
-               <label className="form-control w-full max-w-xs" key={camp.id}>
-                  <div className="label">
-                     <span className="label-text">{camp.label}</span>
+            {fields.map(({ name, label, type, placeholder, isPassword, toggle, visible }) => (
+               <label key={name} className="form-control w-full max-w-xs">
+                  <div className="label justify-between">
+                     <span className="label-text">{label}</span>
                   </div>
-                  <input
-                     type={camp.type}
-                     name={camp.name}
-                     value={formData[camp.name]}
-                     onChange={handleChange}
-                     autoComplete="on"
-                     placeholder={camp.placeholder}
-                     className={`input input-bordered w-full ${errors[camp.name] ? "input-error" : "input-primary"}`}
-                  />
-                  {errors[camp.name] && (
-                     <span className="label-text-alt text-error mt-1">{errors[camp.name]}</span>
-                  )}
+
+                  <div className="flex">
+                     <input
+                        name={name}
+                        type={type}
+                        value={formData[name]}
+                        onChange={handleChange}
+                        placeholder={placeholder}
+                        autoComplete="on"
+                        className={`input input-bordered w-full pr-10 ${errors[name] ? "input-error" : "input-primary"}`}
+                     />
+                     {isPassword && (
+                        <div className="h-4 w-4 opacity-70 hover:cursor-pointer">
+                           <EyeToggleButton hide={visible} onClick={toggle} />
+                        </div>
+                     )}
+                  </div>
+
+                  {errors[name] && <span className="label-text-alt text-error mt-1">{errors[name]}</span>}
                </label>
             ))}
 
-            <button type="submit" className="btn btn-primary mt-2 w-full">
-               Registrarse
-            </button>
+            <button type="submit" className="btn btn-primary mt-2 w-full">Registrarse</button>
 
             <span className="text-center">
                ¿Ya tenés cuenta?
-               <Link to={"/login"} className="link link-info ml-1">
-                  Iniciar sesión
-               </Link>
+               <a href="/login" className="link link-info ml-1">Iniciar sesión</a>
             </span>
          </form>
       </div>
