@@ -1,3 +1,4 @@
+import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 
 export default function NavBar() {
@@ -13,10 +14,10 @@ export default function NavBar() {
 
                <li>
                   <details>
-                     <summary>Cart</summary>
+                     <summary><ShoppingCart /></summary>
                      <ul className="bg-base-100 rounded-t-none p-2">
-                        <li><a>Link 1</a></li>
-                        <li><a>Link 2</a></li>
+                        <li><a>Item 1</a></li>
+                        <li><a>Item 2</a></li>
                      </ul>
                   </details>
                </li>
