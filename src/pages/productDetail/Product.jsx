@@ -14,7 +14,7 @@ export default function Product({ productData }) {
          <div className="card-body lg:w-2/3 space-y-4">
             <h2 className="card-title text-xl md:text-2xl lg:text-3xl font-semibold">{productData.title}</h2>
 
-            <p className="text-base md:text-lg  text-gray-300 leading-relaxed">
+            <p className="text-base md:text-lg   leading-relaxed">
                {productData.description}
             </p>
 

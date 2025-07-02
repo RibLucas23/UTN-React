@@ -51,7 +51,7 @@ export default function LoginForm() {
          id: "email"
       },
       {
-         label: "Contraseña",
+         label: "Password",
          name: "password",
          type: showPassword ? "text" : "password",
          placeholder: "Ingresá tu contraseña",
@@ -65,17 +65,21 @@ export default function LoginForm() {
       <div className="flex items-center justify-center pt-8">
          <form
             onSubmit={handleSubmit}
-            className="flex min-w-80 max-w-xl flex-col gap-6 rounded-lg bg-base-300 p-8"
+            className="flex min-w-80 max-w-xl flex-col gap-6 rounded-lg bg-base-200 p-8"
          >
-            <h1 className="text-2xl font-bold text-center text-primary">Iniciar sesión</h1>
+            <h1 className="text-2xl font-bold text-center text-primary ">Iniciar sesión</h1>
+
 
             {formFields.map(({ name, id, label, type, placeholder, isPassword, toggle, visible }) => (
                <label className="form-control w-full max-w-xs" key={id}>
-                  <div className="label justify-between">
+                  <div className="label flex justify-between pb-1  ">
                      <span className="label-text">{label}</span>
+                     {label === 'Password' &&
+                        (<span class="link label-text-alt link-info no-underline">Forgot password</span>)
+                     }
 
                   </div>
-                  <div className="flex">
+                  <div className={`input input-bordered border-2 rounded-lg w-full ${errors[name] ? "input-error" : "input-primary"} flex  px-0 `} >
 
                      <input
                         type={type}
@@ -84,12 +88,10 @@ export default function LoginForm() {
                         value={formData[name]}
                         onChange={handleChange}
                         placeholder={placeholder}
-                        className={`input input-bordered w-full ${errors[name] ? "input-error" : "input-primary"}`}
+                        className={'pl-4 '}
                      />
                      {isPassword && (
-                        <div className="h-4 w-4 opacity-70 hover:cursor-pointer">
-                           <EyeToggleButton hide={visible} onClick={toggle} />
-                        </div>
+                        <EyeToggleButton hide={visible} onClick={toggle} className={`h-4 w-4 opacity-70 hover:cursor-pointer `} />
                      )}
                   </div>
 

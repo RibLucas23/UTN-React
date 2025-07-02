@@ -51,44 +51,45 @@ export default function RegisterForm() {
       { name: "email", label: "Email", type: "email", placeholder: "tucorreo@ejemplo.com" },
       { name: "telefono", label: "Teléfono", type: "tel", placeholder: "Tu número" },
       {
-         name: "password", label: "Contraseña", type: showPassword ? "text" : "password", placeholder: "Ingresá tu contraseña",
+         name: "password", label: "Password", type: showPassword ? "text" : "password", placeholder: "Ingresá tu contraseña",
          isPassword: true, toggle: () => setShowPassword(!showPassword), visible: showPassword
       },
       {
-         name: "confirmPw", label: "Confirmar Contraseña", type: showConfirmPw ? "text" : "password", placeholder: "Reingresá tu contraseña",
+         name: "confirmPw", label: "RepeatPassword", type: showConfirmPw ? "text" : "password", placeholder: "Reingresá tu contraseña",
          isPassword: true, toggle: () => setShowConfirmPw(!showConfirmPw), visible: showConfirmPw
       }
    ];
 
    return (
       <div className="flex items-center justify-center pt-8">
-         <form onSubmit={handleSubmit} className="flex max-w-xl flex-col gap-6 rounded-lg bg-base-300 p-8">
+         <form onSubmit={handleSubmit} className="flex min-w-80 max-w-xl flex-col gap-6 rounded-lg bg-base-200 p-8">
             <h1 className="text-2xl font-bold text-center text-primary">Registro</h1>
 
             {fields.map(({ name, label, type, placeholder, isPassword, toggle, visible }) => (
-               <label key={name} className="form-control w-full max-w-xs">
-                  <div className="label justify-between">
+               <label className="form-control w-full max-w-xs" key={name}>
+                  <div className="label flex justify-between pb-1  ">
                      <span className="label-text">{label}</span>
-                  </div>
 
-                  <div className="flex">
+
+                  </div>
+                  <div className={`input input-bordered border-2 rounded-lg w-full ${errors[name] ? "input-error" : "input-primary"} flex  px-0 `} >
+
                      <input
-                        name={name}
                         type={type}
+                        name={name}
                         value={formData[name]}
                         onChange={handleChange}
                         placeholder={placeholder}
-                        autoComplete="on"
-                        className={`input input-bordered w-full pr-10 ${errors[name] ? "input-error" : "input-primary"}`}
+                        className={'pl-4 '}
                      />
                      {isPassword && (
-                        <div className="h-4 w-4 opacity-70 hover:cursor-pointer">
-                           <EyeToggleButton hide={visible} onClick={toggle} />
-                        </div>
+                        <EyeToggleButton hide={visible} onClick={toggle} className={`h-4 w-4 opacity-70 hover:cursor-pointer `} />
                      )}
                   </div>
 
-                  {errors[name] && <span className="label-text-alt text-error mt-1">{errors[name]}</span>}
+                  {errors[name] && (
+                     <span className="label-text-alt text-error mt-1">{errors[name]}</span>
+                  )}
                </label>
             ))}
 

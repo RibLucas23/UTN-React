@@ -1,5 +1,6 @@
 import { ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
+import ThemeController from "../components/icons/ThemeController";
 
 export default function NavBar() {
    return (
@@ -21,6 +22,7 @@ export default function NavBar() {
                      </ul>
                   </details>
                </li>
+               <li><ThemeController /> </li>
             </ul>
          </div>
       </nav>
