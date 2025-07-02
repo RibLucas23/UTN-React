@@ -21,14 +21,12 @@ export default function ThemeController() {
 
    return (
       <button onClick={toggleTheme} className="swap swap-rotate">
-         {/* <Moon /> */}
-         {/* Sol (light) */}
+
          <Sun
             className={`swap h-6 w-6 text-primary transition-opacity duration-300 ${theme === "dark" ? "opacity-0" : "opacity-100"
                }`}
          />
 
-         {/* Luna (dark) */}
          <Moon
             className={`swap h-6 w-6 transition-opacity duration-300 ${theme === "dark" ? "opacity-100" : "opacity-0"
                }`}
