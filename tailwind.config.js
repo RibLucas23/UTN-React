@@ -9,7 +9,7 @@ export default {
 	},
 	plugins: [typography, forms, daisyui],
 	daisyui: {
-		themes: ['light', 'dark', 'synthwave'],
+		themes: ['light', 'dark'],
 		darkTheme: 'dark',
 	},
 };

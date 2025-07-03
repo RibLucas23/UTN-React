@@ -55,7 +55,7 @@ export default function RegisterForm() {
          isPassword: true, toggle: () => setShowPassword(!showPassword), visible: showPassword
       },
       {
-         name: "confirmPw", label: "RepeatPassword", type: showConfirmPw ? "text" : "password", placeholder: "Reingresá tu contraseña",
+         name: "confirmPw", label: "Repeat Password", type: showConfirmPw ? "text" : "password", placeholder: "Reingresá tu contraseña",
          isPassword: true, toggle: () => setShowConfirmPw(!showConfirmPw), visible: showConfirmPw
       }
    ];

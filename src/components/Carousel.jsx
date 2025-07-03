@@ -1,5 +1,3 @@
-import React from 'react'
-
 export default function Carousel(items) {
 
    return (
@@ -12,11 +10,7 @@ export default function Carousel(items) {
                   alt="Burger" />
             </div>
          })}
-         {/* <div className="carousel-item">
-            <img
-               src="https://img.daisyui.com/images/stock/photo-1559703248-dcaaec9fab78.webp"
-               alt="Burger" />
-         </div> */}
+
 
       </div>
    )
