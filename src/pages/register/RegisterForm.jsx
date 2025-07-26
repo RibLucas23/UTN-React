@@ -1,28 +1,30 @@
-import { useState } from "react";
-import EyeToggleButton from "../../components/icons/EyeToggleButton";
 import { modalService } from "../../services/SweetAlertService";
+import { Link, useNavigate } from 'react-router-dom';
+import AbstractForm from './../../components/AbstractForm';
 
 export default function RegisterForm() {
-   const [formData, setFormData] = useState({
-      nombre: "",
-      apellido: "",
-      email: "",
-      telefono: "",
-      password: "",
-      confirmPw: ""
-   });
+   const navigate = useNavigate()
+   const formFields = [
+      { name: "nombre", label: "Nombre", type: "text", placeholder: "Tu nombre" },
+      { name: "apellido", label: "Apellido", type: "text", placeholder: "Tu apellido" },
+      { name: "email", label: "Email", type: "email", placeholder: "tucorreo@ejemplo.com" },
+      { name: "telefono", label: "Teléfono", type: "tel", placeholder: "Tu número" },
+      {
+         name: "password",
+         label: "Password",
+         type: "password",
+         placeholder: "Ingresá tu contraseña",
+         id: "password",
+         isPassword: true,
+      },
+      {
+         name: "confirmPw", label: "Repeat Password", type: "password", placeholder: "Reingresá tu contraseña",
+         id: "confirmPw",
 
-   const [errors, setErrors] = useState({});
-   const [showPassword, setShowPassword] = useState(false);
-   const [showConfirmPw, setShowConfirmPw] = useState(false);
-
-   const handleChange = (e) => {
-      const { name, value } = e.target;
-      setFormData((prev) => ({ ...prev, [name]: value }));
-      setErrors((prev) => ({ ...prev, [name]: "" }));
-   };
-
-   const validate = () => {
+         isPassword: true,
+      }
+   ];
+   const validate = (formData) => {
       const newErrors = {};
       const { nombre, apellido, email, telefono, password, confirmPw } = formData;
 
@@ -39,75 +41,39 @@ export default function RegisterForm() {
       return newErrors;
    };
 
-   const handleSubmit = (e) => {
+   const handleSubmit = (formData) => {
       try {
-         e.preventDefault();
-         const newErrors = validate();
-         if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
          console.log("Registro:", formData);
-         setErrors({})
          modalService.showSuccess("Haz creado tu cuenta con satisfactoriamente!")
+         setTimeout(() => {
+            navigate("/");
+         }, 3000);
       } catch (error) {
-         throw new error
+         console.error("Error al registrarse:", error);
+         modalService.showError("Ocurrió un error al registrarse");
       }
+
    };
 
-   const fields = [
-      { name: "nombre", label: "Nombre", type: "text", placeholder: "Tu nombre" },
-      { name: "apellido", label: "Apellido", type: "text", placeholder: "Tu apellido" },
-      { name: "email", label: "Email", type: "email", placeholder: "tucorreo@ejemplo.com" },
-      { name: "telefono", label: "Teléfono", type: "tel", placeholder: "Tu número" },
-      {
-         name: "password", label: "Password", type: showPassword ? "text" : "password", placeholder: "Ingresá tu contraseña",
-         isPassword: true, toggle: () => setShowPassword(!showPassword), visible: showPassword
-      },
-      {
-         name: "confirmPw", label: "Repeat Password", type: showConfirmPw ? "text" : "password", placeholder: "Reingresá tu contraseña",
-         isPassword: true, toggle: () => setShowConfirmPw(!showConfirmPw), visible: showConfirmPw
-      }
-   ];
 
    return (
-      <div className="flex items-center justify-center pt-8">
-         <form onSubmit={handleSubmit} className="flex flex-col max-w-xl gap-6 p-8 rounded-lg min-w-80 bg-base-200">
-            <h1 className="text-2xl font-bold text-center text-primary">Registro</h1>
+      <AbstractForm
+         formFields={formFields}
+         initialFormData={{ email: "", password: "" }}
+         validate={validate}
+         onSubmit={handleSubmit}
+         title="Registrarse"
+         submitText="Registrarse"
+         footer={
+            <>
+               <span className="text-center">
+                  ¿Ya tenés cuenta?
+                  <Link href="/login" className="ml-1 link link-info">Iniciar sesión</Link>
+               </span>
 
-            {fields.map(({ name, label, type, placeholder, isPassword, toggle, visible }) => (
-               <label className="w-full max-w-xs form-control" key={name}>
-                  <div className="flex justify-between pb-1 label ">
-                     <span className="label-text">{label}</span>
-
-
-                  </div>
-                  <div className={`input input-bordered border-2 rounded-lg w-full ${errors[name] ? "input-error" : "input-primary"} flex  px-0 `} >
-
-                     <input
-                        type={type}
-                        name={name}
-                        value={formData[name]}
-                        onChange={handleChange}
-                        placeholder={placeholder}
-                        className={'pl-4 '}
-                     />
-                     {isPassword && (
-                        <EyeToggleButton hide={visible} onClick={toggle} className={`h-4 w-4 opacity-70 hover:cursor-pointer `} />
-                     )}
-                  </div>
-
-                  {errors[name] && (
-                     <span className="mt-1 label-text-alt text-error">{errors[name]}</span>
-                  )}
-               </label>
-            ))}
-
-            <button type="submit" className="w-full mt-2 btn btn-primary">Registrarse</button>
-
-            <span className="text-center">
-               ¿Ya tenés cuenta?
-               <a href="/login" className="ml-1 link link-info">Iniciar sesión</a>
-            </span>
-         </form>
-      </div>
+            </>
+         }
+      />
    );
 }
 
