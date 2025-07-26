@@ -2,19 +2,19 @@ import { Link } from "react-router-dom"
 
 export default function ProductsCard({ productData }) {
    return (
-      <Link to={`product/${productData.id}`} className="card bg-base-100 max-w-96 shadow-sm px-2   border-1 border-base-300">
-         <figure className="w-full h-48 flex items-center justify-center bg-white">
+      <Link to={`product/${productData.id}`} className="px-2 shadow-sm card bg-base-100 max-w-96 border-1 border-base-300">
+         <figure className="flex items-center justify-center w-full h-48 bg-white">
             <img
                src={productData.image}
                alt="Product"
-               className="w-full h-full object-contain"
+               className="object-contain w-full h-full"
             />
          </figure>
          <div className="card-body">
             <h2 className="card-title">{productData.title}</h2>
-            <p className='line-clamp-1  '>{productData.description}</p>
-            <div className="card-actions justify-end items-center">
-               <span className='text-center text-2xl font-bold'>${productData.price}</span>
+            <p className='line-clamp-1 '>{productData.description}</p>
+            <div className="items-center justify-end card-actions">
+               <span className='text-2xl font-bold text-center'>${productData.price}</span>
                <button className="btn btn-primary">Buy Now</button>
             </div>
          </div>

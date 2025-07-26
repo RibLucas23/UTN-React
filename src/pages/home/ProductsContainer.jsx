@@ -8,25 +8,23 @@ export default function ProductsContainer() {
    const [productsFetch, setProductsFetch] = useState([])
    const [currentPage, setCurrentPage] = useState(1)
    const PRODUCTS_PER_PAGE = 9
-   // const agregrar = async (productData) => {
-   //    try {
-   //       const productRef = await addDoc(productosRef, productData)
-   //       return productRef
-   //    } catch (error) {
-   //       console.log("error:", error)
-   //    }
-   // }
-   const fetchProducts = async () => {
-      // const res = await fetch("https://fakestoreapi.com/products")
-      // const data = await res.json()
-      const productosRef = collection(db, "productos")
-      const snapshot = getDocs(productosRef)
-      const data = (await snapshot).docs.map(doc => doc.data())
-      setProductsFetch(data)
-   }
 
+   const fetchProducts = async () => {
+      const productosRef = collection(db, "productos");
+      const snapshot = await getDocs(productosRef);
+      const data = snapshot.docs.map(doc => ({
+         ...doc.data(),
+         id: doc.id  // Esto agrega el ID del documento de Firestore
+      }));
+      setProductsFetch(data);
+   };
    useEffect(() => {
-      fetchProducts()
+      try {
+         fetchProducts()
+
+      } catch (error) {
+         console.log("Error:", error)
+      }
    }, [])
 
    const indexOfLastProduct = currentPage * PRODUCTS_PER_PAGE

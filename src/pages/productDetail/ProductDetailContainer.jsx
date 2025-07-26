@@ -1,29 +1,53 @@
-import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
-import Product from './Product'
+import { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from '../../config/firebase';
+import Product from './Product';
+import { modalService } from '../../services/SweetAlertService';
+
 export default function ProductDetailContainer() {
-   const { id } = useParams()
-   const [product, setProduct] = useState(null)
+   const { id } = useParams();
+   const [product, setProduct] = useState(null);
+   const [loading, setLoading] = useState(true);
+   const [error, setError] = useState(null);
 
    useEffect(() => {
       const fetchProduct = async () => {
-         const res = await fetch(`https://fakestoreapi.com/products/${id}`)
-         const data = await res.json()
-         setProduct(data)
-      }
+         try {
+            setLoading(true);
+            const productRef = doc(db, "productos", id);
+            const productSnap = await getDoc(productRef);
 
-      fetchProduct()
-   }, [id])
+            if (productSnap.exists()) {
+               setProduct({
+                  ...productSnap.data(),
+                  id: productSnap.id
+               });
+            } else {
+               setError("El producto no existe");
+               modalService.showError("Producto no encontrado");
+            }
+         } catch (err) {
+            console.error("Error al obtener producto:", err);
+            setError("Error al cargar el producto");
+            modalService.showError("Error al cargar el producto");
+         } finally {
+            setLoading(false);
+         }
+      };
 
-
+      fetchProduct();
+   }, [id]);
 
    return (
-      <div className="p-10 max-w-7xl mx-auto">
-         {!product ? (
-            <div className="p-10 text-center text-xl">Cargando producto...</div>
+      <div className="p-10 mx-auto max-w-7xl">
+         {loading ? (
+            <div className="p-10 text-xl text-center">Cargando producto...</div>
+         ) : error ? (
+            <div className="p-10 text-xl text-center text-error">{error}</div>
          ) : (
             <Product productData={product} />
          )}
       </div>
-   )
+   );
 }
