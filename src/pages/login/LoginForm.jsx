@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import EyeToggleButton from "../../components/icons/EyeToggleButton";
+import { modalService } from "../../services/SweetAlertService";
 
 export default function LoginForm() {
    const [formData, setFormData] = useState({
@@ -32,14 +33,20 @@ export default function LoginForm() {
 
    }
    const handleSubmit = (e) => {
-      e.preventDefault();
-      const newErrors = validate()
-      if (Object.keys(newErrors).length > 0) {
-         setErrors(newErrors);
-         return;
-      }
+      try {
+         e.preventDefault();
+         const newErrors = validate()
+         if (Object.keys(newErrors).length > 0) {
+            setErrors(newErrors);
+            return;
+         }
 
-      console.log("Login:", formData);
+         console.log("Login:", formData);
+         setErrors({})
+         modalService.showSuccess("Login con exito!")
+      } catch (error) {
+         console.log(error)
+      }
    };
 
    const formFields = [
@@ -65,14 +72,14 @@ export default function LoginForm() {
       <div className="flex items-center justify-center pt-8">
          <form
             onSubmit={handleSubmit}
-            className="flex min-w-80 max-w-xl flex-col gap-6 rounded-lg bg-base-200 p-8"
+            className="flex flex-col max-w-xl gap-6 p-8 rounded-lg min-w-80 bg-base-200"
          >
             <h1 className="text-2xl font-bold text-center text-primary ">Iniciar sesión</h1>
 
 
             {formFields.map(({ name, id, label, type, placeholder, isPassword, toggle, visible }) => (
-               <label className="form-control w-full max-w-xs" key={id}>
-                  <div className="label flex justify-between pb-1  ">
+               <label className="w-full max-w-xs form-control" key={id}>
+                  <div className="flex justify-between pb-1 label ">
                      <span className="label-text">{label}</span>
                      {label === 'Password' &&
                         (<span class="link label-text-alt link-info no-underline">Forgot password</span>)
@@ -96,18 +103,18 @@ export default function LoginForm() {
                   </div>
 
                   {errors[name] && (
-                     <span className="label-text-alt text-error mt-1">{errors[name]}</span>
+                     <span className="mt-1 label-text-alt text-error">{errors[name]}</span>
                   )}
                </label>
             ))}
 
-            <button type="submit" className="btn btn-primary mt-2 w-full">
+            <button type="submit" className="w-full mt-2 btn btn-primary">
                Iniciar sesión
             </button>
 
             <span className="text-center">
                ¿No tenés cuenta?
-               <Link to={"/register"} className="link link-info ml-1">
+               <Link to={"/register"} className="ml-1 link link-info">
                   Registrate
                </Link>
             </span>

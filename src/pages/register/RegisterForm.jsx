@@ -1,5 +1,6 @@
 import { useState } from "react";
 import EyeToggleButton from "../../components/icons/EyeToggleButton";
+import { modalService } from "../../services/SweetAlertService";
 
 export default function RegisterForm() {
    const [formData, setFormData] = useState({
@@ -39,10 +40,16 @@ export default function RegisterForm() {
    };
 
    const handleSubmit = (e) => {
-      e.preventDefault();
-      const newErrors = validate();
-      if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
-      console.log("Registro:", formData);
+      try {
+         e.preventDefault();
+         const newErrors = validate();
+         if (Object.keys(newErrors).length > 0) return setErrors(newErrors);
+         console.log("Registro:", formData);
+         setErrors({})
+         modalService.showSuccess("Haz creado tu cuenta con satisfactoriamente!")
+      } catch (error) {
+         throw new error
+      }
    };
 
    const fields = [
@@ -62,12 +69,12 @@ export default function RegisterForm() {
 
    return (
       <div className="flex items-center justify-center pt-8">
-         <form onSubmit={handleSubmit} className="flex min-w-80 max-w-xl flex-col gap-6 rounded-lg bg-base-200 p-8">
+         <form onSubmit={handleSubmit} className="flex flex-col max-w-xl gap-6 p-8 rounded-lg min-w-80 bg-base-200">
             <h1 className="text-2xl font-bold text-center text-primary">Registro</h1>
 
             {fields.map(({ name, label, type, placeholder, isPassword, toggle, visible }) => (
-               <label className="form-control w-full max-w-xs" key={name}>
-                  <div className="label flex justify-between pb-1  ">
+               <label className="w-full max-w-xs form-control" key={name}>
+                  <div className="flex justify-between pb-1 label ">
                      <span className="label-text">{label}</span>
 
 
@@ -88,16 +95,16 @@ export default function RegisterForm() {
                   </div>
 
                   {errors[name] && (
-                     <span className="label-text-alt text-error mt-1">{errors[name]}</span>
+                     <span className="mt-1 label-text-alt text-error">{errors[name]}</span>
                   )}
                </label>
             ))}
 
-            <button type="submit" className="btn btn-primary mt-2 w-full">Registrarse</button>
+            <button type="submit" className="w-full mt-2 btn btn-primary">Registrarse</button>
 
             <span className="text-center">
                ¿Ya tenés cuenta?
-               <a href="/login" className="link link-info ml-1">Iniciar sesión</a>
+               <a href="/login" className="ml-1 link link-info">Iniciar sesión</a>
             </span>
          </form>
       </div>
