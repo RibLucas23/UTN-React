@@ -1,8 +1,7 @@
-import { addDoc, collection } from "firebase/firestore";
-import { db } from "../../config/firebase";
 import { modalService } from "../../services/SweetAlertService";
 import AbstractForm from "../../components/AbstractForm";
 import { useNavigate } from "react-router-dom";
+import { productsService } from "../../services/FirebaseService";
 
 export default function AddProduct() {
    const navigate = useNavigate()
@@ -31,11 +30,10 @@ export default function AddProduct() {
 
    const handleSubmit = async (formData) => {
       try {
-         const productosRef = collection(db, "productos");
-         await addDoc(productosRef, {
+         await productsService.create({
             ...formData,
             price: parseFloat(formData.price)
-         });
+         })
 
          modalService.showSuccess("Producto agregado correctamente!");
          setTimeout(() => {

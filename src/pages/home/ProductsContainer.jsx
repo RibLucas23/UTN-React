@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react'
 import ProductsCard from './ProductsCard'
-import { collection, getDocs } from 'firebase/firestore'
-import { db } from '../../config/firebase'
+import { productsService } from '../../services/FirebaseService'
 
 
 export default function ProductsContainer() {
@@ -10,12 +9,7 @@ export default function ProductsContainer() {
    const PRODUCTS_PER_PAGE = 9
 
    const fetchProducts = async () => {
-      const productosRef = collection(db, "productos");
-      const snapshot = await getDocs(productosRef);
-      const data = snapshot.docs.map(doc => ({
-         ...doc.data(),
-         id: doc.id  // Esto agrega el ID del documento de Firestore
-      }));
+      const data = await productsService.getAll()
       setProductsFetch(data);
    };
    useEffect(() => {
