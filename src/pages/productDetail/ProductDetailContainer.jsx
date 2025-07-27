@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { doc, getDoc } from 'firebase/firestore';
-import { db } from '../../config/firebase';
 import Product from './Product';
 import { modalService } from '../../services/SweetAlertService';
+import { productsService } from '../../services/FirebaseService';
 
 export default function ProductDetailContainer() {
    const { id } = useParams();
@@ -15,14 +14,10 @@ export default function ProductDetailContainer() {
       const fetchProduct = async () => {
          try {
             setLoading(true);
-            const productRef = doc(db, "productos", id);
-            const productSnap = await getDoc(productRef);
-
-            if (productSnap.exists()) {
-               setProduct({
-                  ...productSnap.data(),
-                  id: productSnap.id
-               });
+            const data = await productsService.getById(id)
+            console.log(data)
+            if (data) {
+               setProduct(data);
             } else {
                setError("El producto no existe");
                modalService.showError("Producto no encontrado");

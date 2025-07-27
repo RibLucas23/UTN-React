@@ -1,16 +1,16 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { doc, getDoc, updateDoc } from 'firebase/firestore';
-import { db } from '../../config/firebase';
 import AbstractForm from '../../components/AbstractForm';
 import { modalService } from '../../services/SweetAlertService';
+import { productsService } from '../../services/FirebaseService';
+import { Trash } from 'lucide-react';
 
 export default function EditProduct() {
    const navigate = useNavigate()
    const { id } = useParams();
    const [initialData, setInitialData] = useState(null);
    const [loading, setLoading] = useState(true);
-
+   const [product, setProduct] = useState({})
    const formFields = [
       { name: "title", label: "Título", type: "text", placeholder: "Nombre del producto" },
       { name: "price", label: "Precio", type: "number", placeholder: "Precio en USD", step: "0.01" },
@@ -22,18 +22,15 @@ export default function EditProduct() {
    useEffect(() => {
       const fetchProduct = async () => {
          try {
-            const docRef = doc(db, "productos", id);
-            const docSnap = await getDoc(docRef);
+            const product = await productsService.getById(id)
 
-            if (docSnap.exists()) {
-               setInitialData({
-                  ...docSnap.data(),
-                  // Asegurarnos que el precio sea string para el input
-                  price: docSnap.data().price.toString()
-               });
-            } else {
+
+            if (!product) {
                modalService.showError("El producto no existe");
             }
+            setInitialData(product);
+            setProduct(product)
+
          } catch (error) {
             console.error("Error al cargar producto:", error);
             modalService.showError("Error al cargar el producto");
@@ -62,11 +59,7 @@ export default function EditProduct() {
 
    const handleSubmit = async (formData) => {
       try {
-         const docRef = doc(db, "productos", id);
-         await updateDoc(docRef, {
-            ...formData,
-            price: parseFloat(formData.price) // Convertir a número
-         });
+         await productsService.update(id, formData)
 
          modalService.showSuccess("Producto actualizado correctamente!");
          setTimeout(() => {
@@ -77,18 +70,64 @@ export default function EditProduct() {
          modalService.showError("Ocurrió un error al actualizar el producto");
       }
    };
+   const handleModal = async () => {
+      try {
+         const result = await modalService.showConfirmation(
+            "Esta acción es irreversible",
+            "¿Está seguro de querer eliminar este producto?"
+         );
 
-   if (loading) return <div>Cargando...</div>;
-   if (!initialData) return <div>Producto no encontrado</div>;
+         if (result.isConfirmed) {
+            handleDelete()
+         } else if (result.isDismissed) {
+            return
+         }
+      } catch (error) {
+         console.error("Error al mostrar el modal:", error);
+      }
+   };
+   const handleDelete = async () => {
+      try {
+         await productsService.delete(id)
+         modalService.showSuccess("Producto eliminado correctamente!");
+         setTimeout(() => {
+            navigate("/");
+         }, 3000);
+      } catch (error) {
+         console.error("Error al eliminar producto:", error);
+         modalService.showError("Ocurrió un error al eliminar el producto");
+      }
+   }
+
+   if (loading) return <div className='flex items-center justify-center py-8 text-3xl'>Cargando...</div>;
+   if (!initialData) return <div className='flex items-center justify-center py-8 text-3xl'>Producto no encontrado</div>;
 
    return (
-      <AbstractForm
-         formFields={formFields}
-         initialFormData={initialData}
-         validate={validate}
-         onSubmit={handleSubmit}
-         title="Editar Producto"
-         submitText="Guardar Cambios"
-      />
+      <main className='items-start justify-center pb-8 md:flex'>
+
+         <AbstractForm
+            formFields={formFields}
+            initialFormData={initialData}
+            validate={validate}
+            onSubmit={handleSubmit}
+            title="Editar Producto"
+            submitText="Guardar Cambios"
+         />
+         <div className='flex items-center justify-center min-h-full px-2 pt-8'>
+            <div className='flex flex-col gap-6 p-8 rounded-lg min-w-80 bg-base-200'>
+
+               <h2 className='text-2xl font-bold text-center text-primary'>Previsualizacion del producto:</h2>
+               <figure className="flex items-center justify-center p-4 ">
+                  <img
+                     src={product.image}
+                     alt={product.title}
+                     className="object-contain w-auto max-h-64"
+                  />
+               </figure>
+
+               <button className=' btn btn-error' onClick={handleModal} > <Trash /> ELIMINAR PRODUCTO</button>
+            </div>
+         </div>
+      </main>
    );
 }
