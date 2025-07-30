@@ -1,6 +1,8 @@
 import { Link, useNavigate } from "react-router-dom";
 import { modalService } from "../../services/SweetAlertService";
 import AbstractForm from "../../components/AbstractForm";
+import { signInWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebase";
 
 export default function LoginForm() {
    const navigate = useNavigate()
@@ -37,9 +39,10 @@ export default function LoginForm() {
       return newErrors;
    };
 
-   const handleSubmit = (formData) => {
+   const handleSubmit = async (formData) => {
       try {
          console.log("Login:", formData);
+         await signInWithEmailAndPassword(auth, formData.email, formData.password)
          modalService.showSuccess("Login con exito!");
          setTimeout(() => {
             navigate("/");

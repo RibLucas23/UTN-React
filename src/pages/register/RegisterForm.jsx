@@ -1,6 +1,8 @@
 import { modalService } from "../../services/SweetAlertService";
 import { Link, useNavigate } from 'react-router-dom';
 import AbstractForm from './../../components/AbstractForm';
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "../../config/firebase";
 
 export default function RegisterForm() {
    const navigate = useNavigate()
@@ -41,9 +43,10 @@ export default function RegisterForm() {
       return newErrors;
    };
 
-   const handleSubmit = (formData) => {
+   const handleSubmit = async (formData) => {
       try {
          console.log("Registro:", formData);
+         await createUserWithEmailAndPassword(auth, formData.email, formData.password)
          modalService.showSuccess("Haz creado tu cuenta con satisfactoriamente!")
          setTimeout(() => {
             navigate("/");
