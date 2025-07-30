@@ -1,11 +1,11 @@
 import { Link, useNavigate } from "react-router-dom";
 import { modalService } from "../../services/SweetAlertService";
 import AbstractForm from "../../components/AbstractForm";
-import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../config/firebase";
+import { useAuth } from "../../context/AuthContext";
 
 export default function LoginForm() {
    const navigate = useNavigate()
+   const { login } = useAuth()
    const formFields = [
       {
          label: "Email",
@@ -42,7 +42,7 @@ export default function LoginForm() {
    const handleSubmit = async (formData) => {
       try {
          console.log("Login:", formData);
-         await signInWithEmailAndPassword(auth, formData.email, formData.password)
+         await login(formData.email, formData.password)
          modalService.showSuccess("Login con exito!");
          setTimeout(() => {
             navigate("/");
