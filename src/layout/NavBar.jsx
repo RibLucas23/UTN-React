@@ -1,4 +1,4 @@
-import { LogOut, ShoppingCart } from "lucide-react";
+import { LogOut, PackagePlus, ShoppingCart } from "lucide-react";
 import { Link } from "react-router-dom";
 import ThemeController from "../components/icons/ThemeController";
 import { useAuth } from "../context/AuthContext";
@@ -25,6 +25,7 @@ export default function NavBar() {
                {user &&
                   <>
                      <li><button onClick={handleLogout} > <LogOut /> Logout</button></li>
+                     <li><Link to={"/addProduct"} > <PackagePlus /> Agregar Productos</Link></li>
 
                   </>
                }

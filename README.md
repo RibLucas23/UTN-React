@@ -12,7 +12,7 @@ Proyecto de ecommerce desarrollado como parte de la primera etapa de la diplomat
 -  🌸 DaisyUI
 -  🖼️ Lucide Icons
 -  🌐 React Router DOM
--  🛍️ FakeStoreAPI (API de productos)
+-  🛍️ Firebase
 -  🔄 useState, useEffect para manejo de estado y efectos
 
 > En próximas clases se integrará **Firebase** para autenticación y funcionalidad de carrito de compras.
@@ -26,6 +26,9 @@ Proyecto de ecommerce desarrollado como parte de la primera etapa de la diplomat
 -  Login y Registro con validaciones personalizadas
 -  Diseño responsive adaptado a mobile y desktop
 -  Navegación mediante React Router
+-  Manejo de base de datos con FireStore
+-  Manejo de sesion con Firabase Auth
+-  Modo claro u oscuro
 
 ---
 
@@ -55,8 +58,6 @@ El servidor se abrirá, por defecto, en http://localhost:5173.
 
 ✅ Vista de detalle por producto (/product/:id)
 
-✅ Hero con imagen destacada y llamado a la acción
-
 ✅ Paginación de productos con scroll automático al top
 
 ✅ Login y Registro con formularios validados manualmente
@@ -65,17 +66,19 @@ El servidor se abrirá, por defecto, en http://localhost:5173.
 
 ✅ Navegación con React Router DOM
 
+✅ Manejo de sesiones con Firebase
+
+✅ Manejo de base de datos con FireStore
+
+✅ Formulario para agregar o modificar productos
+
+✅ Modo claro u oscuro
+
 ---
 
 ## 📦 Próximas funcionalidades
 
-🔐 Autenticación y sesión con Firebase
-
 🛒 Carrito de compras persistente
-
-⭐ Favoritos y/o historial de compras
-
-🌐 Conexión con base de datos en tiempo real (Firebase Firestore)
 
 ---
 
