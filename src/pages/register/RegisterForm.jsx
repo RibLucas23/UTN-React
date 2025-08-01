@@ -11,7 +11,6 @@ export default function RegisterForm() {
       { name: "nombre", label: "Nombre", type: "text", placeholder: "Tu nombre" },
       { name: "apellido", label: "Apellido", type: "text", placeholder: "Tu apellido" },
       { name: "email", label: "Email", type: "email", placeholder: "tucorreo@ejemplo.com" },
-      { name: "telefono", label: "Teléfono", type: "tel", placeholder: "Tu número" },
       {
          name: "password",
          label: "Password",
@@ -29,13 +28,12 @@ export default function RegisterForm() {
    ];
    const validate = (formData) => {
       const newErrors = {};
-      const { nombre, apellido, email, telefono, password, confirmPw } = formData;
+      const { nombre, apellido, email, password, confirmPw } = formData;
 
       if (!nombre) newErrors.nombre = "Campo obligatorio";
       if (!apellido) newErrors.apellido = "Campo obligatorio";
       if (!email) newErrors.email = "Campo obligatorio";
       else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) newErrors.email = "Email inválido";
-      if (!telefono) newErrors.telefono = "Campo obligatorio";
       if (!password) newErrors.password = "Campo obligatorio";
       else if (password.length < 6) newErrors.password = "Mínimo 6 caracteres";
       if (!confirmPw) newErrors.confirmPw = "Campo obligatorio";
